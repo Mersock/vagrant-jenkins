@@ -1,0 +1,33 @@
+services:
+  jenkins:
+    image: jenkins/jenkins:lts-jdk17
+    restart: always
+    privileged: true
+    user: root
+    ports:
+      - 8080:8080
+      - 50000:50000
+    container_name: jenkins
+    volumes:
+      - jenkins-data:/var/jenkins_home
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: superuser
+      MONGO_INITDB_ROOT_PASSWORD: superpass
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: superuser
+      ME_CONFIG_MONGODB_ADMINPASSWORD: superpass
+      ME_CONFIG_MONGODB_URL: mongodb://superuser:superpass@mongo:27017/
+      ME_CONFIG_BASICAUTH: false
+
+volumes:
+  jenkins-data:
