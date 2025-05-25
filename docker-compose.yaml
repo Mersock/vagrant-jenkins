@@ -37,6 +37,7 @@ services:
     image: docker.io/bitnami/postgresql:latest
     volumes:
       - 'postgresql_data:/bitnami/postgresql'
+    restart: always
     environment:
       # ALLOW_EMPTY_PASSWORD is recommended only for development.
       - ALLOW_EMPTY_PASSWORD=yes
@@ -50,6 +51,7 @@ services:
       - '8082:9000'
     volumes:
       - 'sonarqube_data:/bitnami/sonarqube'
+    restart: always
     depends_on:
       - postgresql
     environment:
