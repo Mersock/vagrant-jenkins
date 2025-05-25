@@ -17,6 +17,9 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: superuser
       MONGO_INITDB_ROOT_PASSWORD: superpass
+    container_name: mongo
+    volumes:
+    - mongo-data:/data/db 
 
   mongo-express:
     image: mongo-express
@@ -28,6 +31,8 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: superpass
       ME_CONFIG_MONGODB_URL: mongodb://superuser:superpass@mongo:27017/
       ME_CONFIG_BASICAUTH: false
+    container_name: mongo-express
 
 volumes:
   jenkins-data:
+  mongo-data:
