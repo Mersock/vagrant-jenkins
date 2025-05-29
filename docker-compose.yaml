@@ -1,6 +1,19 @@
 services:
+  docker:
+    image: docker:dind
+    restart: always
+    privileged: true
+    container_name: docker
+    volumes:
+      - jenkins-docker-certs:/certs/client 
+      - jenkins-data:/var/jenkins_home 
+    environment:
+      - DOCKER_TLS_CERTDIR=/certs
+
   jenkins:
-    image: jenkins/jenkins:lts-jdk17
+    # image: jenkins/jenkins:lts-jdk17
+    build:
+      context: .
     restart: always
     privileged: true
     user: root
@@ -10,6 +23,11 @@ services:
     container_name: jenkins
     volumes:
       - jenkins-data:/var/jenkins_home
+      - jenkins-docker-certs:/certs/client:ro
+    environment:
+      - DOCKER_HOST=tcp://docker:2376
+      - DOCKER_CERT_PATH=/certs/client
+      - DOCKER_TLS_VERIFY=0
 
   mongo:
     image: mongo
@@ -67,6 +85,7 @@ services:
 volumes:
   jenkins-data:
   mongo-data:
+  jenkins-docker-certs:
   postgresql_data:
     driver: local
   sonarqube_data:
